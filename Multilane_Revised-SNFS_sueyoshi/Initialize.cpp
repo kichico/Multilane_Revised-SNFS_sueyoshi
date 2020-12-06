@@ -5,6 +5,7 @@ void Initialize::initialize(int lanelength, int NumberofCars) {
 	map.initialize(lanelength);
 	_initialplacement(lanelength,NumberofCars);
 	_defineVmax(flg_distributedVmax,NumberofCars);
+	car.Fromcurrent_toprevious();
 }
 
 void Initialize::_initialplacement(int lanelength,int NumberofCars) {
