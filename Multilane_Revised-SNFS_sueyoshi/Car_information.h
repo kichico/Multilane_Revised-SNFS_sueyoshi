@@ -1,16 +1,20 @@
-#ifndef CAR_INFORMATION.H
-#define CAR_INFORMATION.H
+#ifndef CARINFORMATION_H
+#define CARINFORMATION_H
 
 #include <vector>
 class Car_information {
 private:
-	struct CurrentandPrevious {
+	struct CurrentandPreviousvector {
 		std::vector<int> current;
 		std::vector<int> previous;
 	};
-	struct PreceedingandFollowing {
-		std::vector<int> preceeding;
-		std::vector<int> following;
+	struct PreceedingandFollowingcarID {
+		CurrentandPreviousvector preceeding;
+		CurrentandPreviousvector following;
+	};
+	struct Leadingcar {
+		int ID;
+		int distance;
 	};
 public:
 	struct Measure {
@@ -22,9 +26,10 @@ public:
 	std::vector<int> S;
 	void initialize(int NumberofCars);
 	void Fromcurrent_toprevious();
-	CurrentandPrevious position, velocity, distance;
-	std::vector<PreceedingandFollowing> around;
+	CurrentandPreviousvector position, velocity, distance;
+	Leadingcar leadingcar;
+	PreceedingandFollowingcarID around;
 	std::vector<Measure> measure;
 };
 
-#endif // !CAR_INFORMATION.H
+#endif // !CARINFORMATION_H

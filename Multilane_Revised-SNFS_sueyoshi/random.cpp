@@ -1,44 +1,35 @@
 #include "random.h"
 
-Random::Random() {
-	int rnd = get_rand(0);
-	engine = new svrng_engine_t();
-	*engine = svrng_new_mt19937_engine(rnd);
+int Random::create_int_rand(std::mt19937 mt, int xmin, int xmax) {
+	std::uniform_int_distribution<> rd(xmin, xmax);
+	return rd(mt);
 }
 
-Random::Random(int csn) {
-	int rnd = get_rand(csn);
-	engine = new svrng_engine_t();
-	*engine = svrng_new_mt19937_engine(rnd);
-}
-
-Random::~Random() {
-	svrng_delete_engine(*engine);
-	delete engine;
+double Random::create_double_rand(std::mt19937 mt, double xmin, double xmax) {
+	std::uniform_real_distribution<> rd(xmin, xmax);
+	return rd(mt);
 }
 
 int Random::random(int N) {
-	svrng_distribution_t dist = svrng_new_uniform_distribution_int(0, N + 1);
-	int I = svrng_generate_int(*engine, dist);
-	svrng_delete_distribution(dist);
-	return I;
+	std::random_device rnd;
+	std::mt19937 mt(rnd());
+	return create_int_rand(mt, 0, N);
 }
 
 int Random::random(int Nmin, int Nmax) {
-	svrng_distribution_t dist = svrng_new_uniform_distribution_int(Nmin, Nmax + 1);
-	int I = svrng_generate_int(*engine, dist);
-	svrng_delete_distribution(dist);
-	return I;
+	std::random_device rnd;
+	std::mt19937 mt(rnd());
+	return create_int_rand(mt, Nmin, Nmax);
 }
 
-double Random::random(double _D_) {
-	svrng_distribution_t dist = svrng_new_uniform_distribution_double(0.0, _D_);
-	double D = svrng_generate_double(*engine, dist);
-	svrng_delete_distribution(dist);
-	return D;
+double Random::random(double D) {
+	std::random_device rnd;
+	std::mt19937 mt(rnd());
+	return create_double_rand(mt, 0.0, D);
 }
 
-int Random::get_rand(int CCC) {
-	srand((unsigned int)time(NULL) + CCC * 10000);
-	return rand();
+double Random::random(double Dmin, double Dmax) {
+	std::random_device rnd;
+	std::mt19937 mt(rnd());
+	return create_double_rand(mt, Dmin, Dmax);
 }

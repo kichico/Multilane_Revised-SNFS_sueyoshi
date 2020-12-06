@@ -1,15 +1,23 @@
-#ifndef MAP_INFORMATION.H
-#define MAP_INFORMATION.H
+#ifndef MAPINFORMATION_H
+#define MAPINFORMATION_H
 #include <vector>
 class Map_information {
 private:
+	struct CurrentandPreviousbool {
+		std::vector<bool> current;
+		std::vector<bool> previous;
+	};
+	struct CurrentandPreviousint {
+		std::vector<int> current;
+		std::vector<int> previous;
+	};
 	struct map_information {
-		std::vector<bool> existence;
-		std::vector<int> ID;
+		CurrentandPreviousbool existence;
+		CurrentandPreviousint ID;
 	};
 public:
-	map_information map, update;
+	map_information recorded, updated;
 	void initialize(int lanelength);
 };
 
-#endif // !MAP_INFORMATION.H
+#endif // !MAPINFORMATION_H
