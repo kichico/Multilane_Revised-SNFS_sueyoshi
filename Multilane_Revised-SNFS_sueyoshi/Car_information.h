@@ -12,11 +12,12 @@ private:
 		CurrentandPreviousvector preceeding;
 		CurrentandPreviousvector following;
 	};
+public:
 	struct Leadingcar {
 		int ID;
 		int distance;
+		bool existence;
 	};
-public:
 	struct Measure {
 		bool measured;
 		double elapsed;

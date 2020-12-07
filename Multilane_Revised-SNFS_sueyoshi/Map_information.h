@@ -15,9 +15,16 @@ private:
 		CurrentandPreviousbool existence;
 		CurrentandPreviousint ID;
 	};
+	struct update_information {
+		std::vector<bool> existence;
+		std::vector<int> ID;
+	};
 public:
-	map_information recorded, updated;
+	int lanevelocity;
+	map_information recorded;
+	update_information updated;
 	void initialize(int lanelength);
+	void Fromcurrent_toprevious();
 };
 
 #endif // !MAPINFORMATION_H

@@ -6,6 +6,7 @@ void Initialize::initialize(int lanelength, int NumberofCars) {
 	_initialplacement(lanelength,NumberofCars);
 	_defineVmax(flg_distributedVmax,NumberofCars);
 	car.Fromcurrent_toprevious();
+	map.Fromcurrent_toprevious();
 }
 
 void Initialize::_initialplacement(int lanelength,int NumberofCars) {
@@ -24,15 +25,15 @@ void Initialize::_initialplacement(int lanelength,int NumberofCars) {
 	int preceedingcarposition;
 	int preceedingcarID;
 	int focalcarID;
-	int followingcarposition;
 	int maximumdistance = 0;
-
+	int firstidentifiedcarID;
 	//TODO When it is introduced Multilane system, these conditions shoud be modified.
 	
 	for (int i = 0; i < lanelength; i++) {
 		if (map.recorded.existence.current[i]) {
 			if (cnt_identified == 1) {
 				preceedingcarID = map.recorded.ID.current[i];
+				firstidentifiedcarID = preceedingcarID;
 				preceedingcarposition = car.position.current[preceedingcarID];
 				++cnt_identified;
 			}
@@ -54,18 +55,18 @@ void Initialize::_initialplacement(int lanelength,int NumberofCars) {
 			if (cnt_identified == NumberofCars) {
 				focalcarID = map.recorded.ID.current[i];
 				car.around.preceeding.current[focalcarID] = preceedingcarID;
-				car.around.following.current[preceedingcarID] = car.around.preceeding.current[0] = focalcarID;
+				car.around.following.current[preceedingcarID] = car.around.preceeding.current[firstidentifiedcarID] = focalcarID;
 				car.distance.current[focalcarID] = preceedingcarposition - car.position.current[focalcarID];
 				if (car.distance.current[focalcarID] < 0) car.distance.current[focalcarID] += lanelength;
-				car.distance.current[0] = car.position.current[focalcarID] - car.position.current[0];
-				if (car.distance.current[0] < 0) car.distance.current[0] += lanelength;
+				car.distance.current[firstidentifiedcarID] = car.position.current[focalcarID] - car.position.current[firstidentifiedcarID];
+				if (car.distance.current[firstidentifiedcarID] < 0) car.distance.current[firstidentifiedcarID] += lanelength;
 				if (car.distance.current[focalcarID] >= maximumdistance) {
 					maximumdistance = car.distance.current[focalcarID];
 					car.leadingcar.ID = focalcarID;
 					car.leadingcar.distance = maximumdistance;
 				}
-				if (car.distance.current[0] >= maximumdistance) {
-					maximumdistance = car.distance.current[0];
+				if (car.distance.current[firstidentifiedcarID] >= maximumdistance) {
+					maximumdistance = car.distance.current[firstidentifiedcarID];
 					car.leadingcar.ID = 0;
 					car.leadingcar.distance = maximumdistance;
 				}
