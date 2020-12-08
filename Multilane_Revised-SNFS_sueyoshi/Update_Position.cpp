@@ -17,7 +17,7 @@ void Update_Position::update_position() {
 	if (Measurewillbedone) {
 		for (int i = 0; i < constants.N; i++) if (car.position.previous[i] < 100 && car.position.current[i] >= 100) {
 			flux++;
-			std::cout << i << "th car.position.current=>" << car.position.current[i] << ", car.position.previous=>" << car.position.previous[i] << std::endl;
+			//std::cout << i << "th car.position.current=>" << car.position.current[i] << ", car.position.previous=>" << car.position.previous[i] << std::endl;
 		}
 	}
 }
