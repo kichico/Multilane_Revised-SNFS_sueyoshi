@@ -1,7 +1,7 @@
 #include "Decide_Velocity.h"
 
 void Decide_Velocity::decide_velocity() {
-#pragma omp parallel for num_threads(4)
+//#pragma omp parallel for num_threads(4)
 	for (int ID = 0; ID < constants.N; ID++) {
 		V = car.velocity.current[ID]; 
 		_make_V1(V, ID);
@@ -33,7 +33,8 @@ void Decide_Velocity::_make_V2(int ID) {
 		car.S[ID] = 1;
 		if (random.random(1.0) <= constants.r) car.S[ID] = constants.S;
 		int previous_preceedingcarID = car.around.preceeding.previous[ID];
-		car.distance.previous[ID] = car.position.previous[previous_preceedingcarID] - car.position.previous[ID] - car.S[ID];
+		int distance_previous = car.position.previous[previous_preceedingcarID] - car.position.previous[ID];
+		distance_previous -= car.S[ID];
 		if (car.distance.previous[ID] < 0) car.distance.previous[ID] += constants.lanelength;
 		if (rule.V1 > car.distance.previous[ID]) rule.V2 = car.distance.previous[ID];
 	}
@@ -48,7 +49,8 @@ void Decide_Velocity::_make_V3(int ID) {
 	rule.V3 = rule.V2;
 	car.S[ID] = constants.S;
 	int preceedingcarID = car.around.preceeding.current[ID];
-	car.distance.current[ID] = car.position.current[preceedingcarID] - car.position.current[ID] - car.S[ID];
+	int distance_current = car.position.previous[preceedingcarID] - car.position.previous[ID];
+	distance_current -= car.S[ID];
 	if (car.distance.current[ID] < 0) car.distance.current[ID] += constants.lanelength;
 	if (rule.V2 > car.distance.current[ID]) rule.V3 = car.distance.current[ID];
 	if (rule.V3 < 0) {
