@@ -3,7 +3,7 @@
 void Multilane_trafficflow_model::calculation(int lanelength, int NumberofCars, double C, double D) {
 	_defineconstants(lanelength, NumberofCars, C, D);
 	std::string fileplace = "C:/Users/sueki/source/repos/Result/Multilane_Sueyoshi/";
-	std::string filename_globalrho_flux = "globalrho_flux.csv";
+	std::string filename_globalrho_flux = "globalrho_flux_multilane.csv";
 	filename_globalrho_flux = fileplace + filename_globalrho_flux;
 	std::ofstream ofsDF(filename_globalrho_flux, std::ios::app);
 	//ofsDF << "globalrho,flux" << std::endl;
@@ -12,7 +12,7 @@ void Multilane_trafficflow_model::calculation(int lanelength, int NumberofCars, 
 	std::ofstream ofsPT(filename_position_time, std::ios::app);
 	ofsPT << "elapsedtime,position" << std::endl;
 	std::cout <<constants.N << " => ";
-	initialize(constants.lanelength,constants.N);
+	initialize(constants.lanelength, constants.N, constants.NumofLane);
 	Measurewillbedone = false;
 	double global_density = constants.N / constants.lanelength;
 	for (int i = 0; i < 1800; i++) {
@@ -23,10 +23,7 @@ void Multilane_trafficflow_model::calculation(int lanelength, int NumberofCars, 
 	for (int i = 0; i < 300; i++) {
 		_dosimulation();
 		//std::cout << i << " th simulation" << std::endl;
-		if (constants.N == 180) {
-			for (int ID = 0; ID < constants.N; ID++) ofsPT << i << ","<< car.position.current[ID] << std::endl;
-			std::cout << "debug..." << std::endl;
-		}
+		if (constants.N == 180) for (int ID = 0; ID < constants.N; ID++) ofsPT << i << ","<< car.position.current[ID] << std::endl;
 	}
 	ofsDF << constants.N << "," << flux << std::endl;
 	std::cout << flux << std::endl;
@@ -37,7 +34,10 @@ void Multilane_trafficflow_model::calculation(int lanelength, int NumberofCars, 
 
 void Multilane_trafficflow_model::_dosimulation() {
 	decide_velocity();
+	turnon_turn_signal();
 	update_position();
+	lane_change(car.canditate_velocity);
+	if (flg_lanechange) update_position();
 }
 
 void Multilane_trafficflow_model::_defineconstants(int lanelength, int NumberofCars, double C, double D) {
@@ -51,4 +51,7 @@ void Multilane_trafficflow_model::_defineconstants(int lanelength, int NumberofC
 	constants.S = 2;
 	constants.N = NumberofCars;
 	constants.lanelength = lanelength;
+	constants.NumofLane = 3;
+	constants.C = C;
+	constants.D = D;
 }

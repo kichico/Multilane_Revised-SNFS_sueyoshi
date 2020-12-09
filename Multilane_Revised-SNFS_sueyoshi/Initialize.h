@@ -10,15 +10,16 @@
 
 class Initialize {
 private:
-	void _initialplacement(int lanelength,int NumberofCars);
+	void _initialplacement(int lanelength,int NumberofCars, int NumberofLanes);
 	void _defineVmax(bool flg_ditributedVmax, int NumberofCars);
+	void _initialassignment_strategy();
 public:
 	bool flg_distributedVmax = false;
 	Car_information car;
 	Map_information map;
 	Random random;
 	Constants constants;
-	void initialize(int lanelength, int NumberofCars);
+	void initialize(int lanelength, int NumberofCars, int NumberofLanes);
 };
 
 #endif // !INITIALIZE_H

@@ -12,6 +12,14 @@ private:
 		CurrentandPreviousvector preceeding;
 		CurrentandPreviousvector following;
 	};
+	struct Signalstatus {
+		const int left = 0;
+		const int right = 1;
+	};
+	struct Strategy {
+		const int C = 0;
+		const int D = 0;
+	};
 public:
 	struct Leadingcar {
 		int ID;
@@ -23,14 +31,19 @@ public:
 		double elapsed;
 	};
 	std::vector<int> canditate_velocity;
-	//std::vector<int> lanenumber;
+	std::vector<int> lanenumber;
 	std::vector<int> S;
-	void initialize(int NumberofCars);
+	std::vector<int> signal;
+	Signalstatus signal_status;
+	Strategy strategy;
+	void initialize(int NumberofCars, int NumberofLanes);
 	void Fromcurrent_toprevious();
 	CurrentandPreviousvector position, velocity, distance;
-	Leadingcar leadingcar;
+	std::vector<Leadingcar> leadingcar;
 	PreceedingandFollowingcarID around;
 	std::vector<Measure> measure;
+	std::vector<int> assigned_strategy;
+	
 };
 
 #endif // !CARINFORMATION_H

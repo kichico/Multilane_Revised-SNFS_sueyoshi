@@ -14,5 +14,8 @@ public:
 	int S;
 	int N;
 	int lanelength;
+	int NumofLane;
+	double C;
+	double D;
 };
 #endif // !CONSTANTS_H

@@ -9,21 +9,28 @@ void Update_Position::update_position() {
 	map.lanevelocity = 0;
 	bool keepupdating = true;
 	int lanenumber = 0;
-	while (keepupdating) keepupdating = _update_fromLeadingcar(lanenumber,Measurewillbedone);
+	for (int i = 0; i < constants.NumofLane; i++) while (keepupdating) keepupdating = _update_fromLeadingcar(lanenumber, Measurewillbedone);
 	map.recorded.existence.current = map.updated.existence;
 	map.recorded.ID.current = map.updated.ID;
 	car.canditate_velocity = std::vector<int>(constants.N, 0);
 	//car.velocity.current = car.canditate_velocity;
 	if (Measurewillbedone) {
-		for (int i = 0; i < constants.N; i++) if (car.position.previous[i] < 100 && car.position.current[i] >= 100) {
-			flux++;
-			//std::cout << i << "th car.position.current=>" << car.position.current[i] << ", car.position.previous=>" << car.position.previous[i] << std::endl;
+		for (int lanenumber = 0; lanenumber < constants.NumofLane; lanenumber++) {
+			int i = 1;
+			while (true) {
+				if (map.recorded.existence.previous[lanenumber][100 - i]) {
+					int possiblypassedcarID = map.recorded.ID.current[lanenumber][100 - i];
+					if (car.position.current[possiblypassedcarID] >= 100) flux++; std::cout << flux << std::endl;
+				}
+				i++;
+				if (i > 5) break;
+			}
 		}
 	}
 }
 
 bool Update_Position::_update_fromLeadingcar(int lanenumber, bool flg_measure) {
-	int ID = car.leadingcar.ID;
+	int ID = car.leadingcar[lanenumber].ID;
 	int nextposition = 0;
 	map.lanevelocity = 0;
 	Car_information::Leadingcar tempLeadingcar;
@@ -33,7 +40,7 @@ bool Update_Position::_update_fromLeadingcar(int lanenumber, bool flg_measure) {
 	while (true) {
 		if (Update_again[ID]) _move_forward_car(ID);
 		else nextposition = car.position.current[ID];
-		if (ID == car.leadingcar.ID) car.leadingcar.existence = false;
+		if (ID == car.leadingcar[lanenumber].ID) car.leadingcar[lanenumber].existence = false;
 		map.lanevelocity += car.canditate_velocity[ID];
 		int headway = car.distance.current[ID];
 		if (!tempLeadingcar.existence) {
@@ -47,7 +54,7 @@ bool Update_Position::_update_fromLeadingcar(int lanenumber, bool flg_measure) {
 				tempLeadingcar.distance = headway;
 			}
 		}
-		if (car.around.following.current[ID] == car.leadingcar.ID) {
+		if (car.around.following.current[ID] == car.leadingcar[lanenumber].ID) {
 			int followingcarID = car.around.following.current[ID];
 			int followingcarposition = car.position.current[followingcarID];
 			int distance = car.position.current[ID] - followingcarposition;
@@ -56,26 +63,27 @@ bool Update_Position::_update_fromLeadingcar(int lanenumber, bool flg_measure) {
 				tempLeadingcar.ID = followingcarID;
 				tempLeadingcar.distance = distance;
 			}
-			//TODO modify when introducing multilane sysy\tem
+			//TODO modify when introducing multilane system
 			if (previouslanevelocity == map.lanevelocity) return false;
 			else {
-				ID = car.leadingcar.ID;
+				ID = car.leadingcar[lanenumber].ID;
 				previouslanevelocity = map.lanevelocity;
 				map.lanevelocity = 0;
 			}
 		}
 		else ID = car.around.following.current[ID];
 	}
-	car.leadingcar = tempLeadingcar;
+	car.leadingcar[lanenumber] = tempLeadingcar;
 }
 
 void Update_Position::_move_forward_car(int ID) {
 	int nextposition = car.position.current[ID];
 	int distanceavailable = car.canditate_velocity[ID];
+	int lanenumber = car.lanenumber[ID];
 	for (int i = 1; i <= distanceavailable; i++) {
 		++nextposition;
 		if (nextposition >= constants.lanelength) nextposition -= constants.lanelength;
-		if (map.updated.existence[nextposition]) {
+		if (map.updated.existence[lanenumber][nextposition]) {
 			Update_again[ID] = true;
 			--nextposition;
 			if (nextposition < 0) nextposition += constants.lanelength;
@@ -84,10 +92,10 @@ void Update_Position::_move_forward_car(int ID) {
 		}
 	}
 	if (nextposition == car.position.current[ID] + distanceavailable) Update_again[ID] = false;
-	map.updated.existence[car.position.current[ID]] = false;
-	map.updated.existence[nextposition] = true;
-	map.updated.ID[car.position.current[ID]] = 0;
-	map.updated.ID[nextposition] = ID;
+	map.updated.existence[lanenumber][car.position.current[ID]] = false;
+	map.updated.existence[lanenumber][nextposition] = true;
+	map.updated.ID[lanenumber][car.position.current[ID]] = 0;
+	map.updated.ID[lanenumber][nextposition] = ID;
 	car.position.current[ID] = nextposition;
 	car.velocity.current[ID] = nextposition - car.position.previous[ID];
 	if (car.velocity.current[ID] < 0) car.velocity.current[ID] += constants.lanelength;

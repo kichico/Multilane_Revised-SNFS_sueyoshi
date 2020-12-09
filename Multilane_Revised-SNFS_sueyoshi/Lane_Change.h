@@ -22,8 +22,8 @@ private:
 		int distance;
 	};
 	struct  Around_Information {
-		front_rear_information front;
-		front_rear_information rear;
+		front_rear_information preceeding;
+		front_rear_information following;
 	};
 	struct Lanechanger {
 		int LanechangerID;
@@ -31,6 +31,7 @@ private:
 		Around_Information around_information;
 	};
 	std::vector<Lane_Change::Lanechanger> canditate_ListofLanechanger;
+	std::vector<int> ListofLanechanger,ListofLanechanger_signal;
 public:
 	void lane_change(std::vector<int> canditate_velocity);
 	void turnon_turn_signal();
