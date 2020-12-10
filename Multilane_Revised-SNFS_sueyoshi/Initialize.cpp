@@ -11,6 +11,7 @@ void Initialize::initialize(int lanelength, int NumberofCars, int NumberofLanes)
 }
 
 void Initialize::_initialplacement(int lanelength,int NumberofCars, int NumberofLanes) {
+	
 	struct InitialPlacement {
 		int lanenumber;
 		int cellnumber;
@@ -25,6 +26,9 @@ void Initialize::_initialplacement(int lanelength,int NumberofCars, int Numberof
 		}
 	}
 	car.lanenumber = std::vector<int>(constants.N, 0);
+	//ここでListを車線ごとに作っておいた方がその下のセクションが楽なのでは？
+	//しかしランダムピックアップなので配列ごとにpositionを基準にsortが必要になる
+	//最初の方はsortが早いが車の数が増えてきたら従来通りの方が計算量はマシかもしれない
 	for (int ID = 0; ID < NumberofCars; ID++) {
 		int remainListsize = List_notplacedcell.size();
 		int picker = random.random(remainListsize - 1);
@@ -37,17 +41,22 @@ void Initialize::_initialplacement(int lanelength,int NumberofCars, int Numberof
 		map.recorded.ID.current[pickedupcell.lanenumber][pickedupcell.cellnumber] = map.recorded.ID.previous[pickedupcell.lanenumber][pickedupcell.cellnumber] = ID;
 		map.NumberofCars_at_thislane[pickedupcell.lanenumber]++;
 	}
-	int followingcarposition = 0;
-	int followingcarID = 0;
-	int focalcarID = 0;
-	int maximumdistance = 0;
-	int firstidentifiedcarID = 0;
+	
 	//TODO When it is introduced Multilane system, these conditions shoud be modified.
 	for (int lanenumber = 0; lanenumber < NumberofLanes; lanenumber++) {
 		int cnt_identified = 1;
+		int followingcarposition = 0;
+		int followingcarID = 0;
+		int focalcarID = 0;
+		int maximumdistance = 0;
+		int firstidentifiedcarID = 0;
+		if (map.NumberofCars_at_thislane[lanenumber] == 0) {
+			car.leadingcar[lanenumber].existence = false;
+			continue;
+		}
 		for (int cellnumber = 0; cellnumber < lanelength; cellnumber++) {
 			if (map.recorded.existence.current[lanenumber][cellnumber]) {
-				if (cnt_identified == 1) {
+				if (cnt_identified == 1 && map.NumberofCars_at_thislane[lanenumber] != 1) {
 					followingcarID = map.recorded.ID.current[lanenumber][cellnumber];
 					firstidentifiedcarID = followingcarID;
 					followingcarposition = car.position.current[followingcarID];
@@ -69,18 +78,19 @@ void Initialize::_initialplacement(int lanelength,int NumberofCars, int Numberof
 					followingcarposition = car.position.current[followingcarID];
 					++cnt_identified;
 				}
-				else if (cnt_identified == map.NumberofCars_at_thislane[lanenumber]) {
+				else if (cnt_identified == map.NumberofCars_at_thislane[lanenumber] || map.NumberofCars_at_thislane[lanenumber] == 1) {
 					focalcarID = map.recorded.ID.current[lanenumber][cellnumber];
 					//followingcarID = car.around.following.current[focalcarID];
+					if (map.NumberofCars_at_thislane[lanenumber] == 1) followingcarID = firstidentifiedcarID = focalcarID;
 					car.around.following.current[focalcarID] = followingcarID;
 					car.around.preceeding.current[followingcarID] = car.around.following.current[firstidentifiedcarID] = focalcarID;
 					car.around.preceeding.current[focalcarID] = firstidentifiedcarID;
 					car.distance.current[followingcarID] = car.position.current[focalcarID] - followingcarposition;
-					if (car.distance.current[followingcarID] < 0) car.distance.current[followingcarID] += lanelength;
+					if (car.distance.current[followingcarID] <= 0) car.distance.current[followingcarID] += lanelength;
 					car.distance.current[focalcarID] = car.position.current[firstidentifiedcarID] - car.position.current[focalcarID];
-					if (car.distance.current[focalcarID] < 0) car.distance.current[focalcarID] += lanelength;
+					if (car.distance.current[focalcarID] <= 0) car.distance.current[focalcarID] += lanelength;
 					car.distance.current[firstidentifiedcarID] = car.position.current[firstidentifiedcarID] - car.position.current[focalcarID];
-					if (car.distance.current[firstidentifiedcarID] < 0) car.distance.current[firstidentifiedcarID] += lanelength;
+					if (car.distance.current[firstidentifiedcarID] <= 0) car.distance.current[firstidentifiedcarID] += lanelength;
 					if (car.distance.current[followingcarID] >= maximumdistance) {
 						maximumdistance = car.distance.current[followingcarID];
 						car.leadingcar[lanenumber].existence = true;
@@ -88,11 +98,13 @@ void Initialize::_initialplacement(int lanelength,int NumberofCars, int Numberof
 						car.leadingcar[lanenumber].distance = maximumdistance;
 					}
 					if (car.distance.current[focalcarID] >= maximumdistance) {
+						car.leadingcar[lanenumber].existence = true;
 						maximumdistance = car.distance.current[focalcarID];
 						car.leadingcar[lanenumber].ID = focalcarID;
 						car.leadingcar[lanenumber].distance = maximumdistance;
 					}
 					if (car.distance.current[firstidentifiedcarID] >= maximumdistance) {
+						car.leadingcar[lanenumber].existence = true;
 						maximumdistance = car.distance.current[firstidentifiedcarID];
 						car.leadingcar[lanenumber].ID = firstidentifiedcarID;
 						car.leadingcar[lanenumber].distance = maximumdistance;
@@ -133,11 +145,13 @@ void Initialize::_initialassignment_strategy() {
 	int NumofD = floor(ratio_D * constants.N);
 	std::vector<int> Listofcars(constants.N, 0);
 	for (int i = 0; i < constants.N; i++) Listofcars[i] = car.strategy.C;
+	car.assigned_strategy = Listofcars;
 	for (int i = 0; i < NumofD; i++) {
 		int NotassignedstrategyD = Listofcars.size();
 		int picker = random.random(NotassignedstrategyD - 1);
-		int pikedupcar = Listofcars[picker];
-		std::iter_swap(Listofcars.begin() + pikedupcar, Listofcars.end() - 1);
+		//int pikedupcar = Listofcars[picker];
+		std::iter_swap(Listofcars.begin() + picker, Listofcars.end() - 1);
+		car.assigned_strategy[picker] = car.strategy.D;
 		Listofcars.pop_back();
 	}
 }

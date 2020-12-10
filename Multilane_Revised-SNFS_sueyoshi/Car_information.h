@@ -18,7 +18,7 @@ private:
 	};
 	struct Strategy {
 		const int C = 0;
-		const int D = 0;
+		const int D = 1;
 	};
 public:
 	struct Leadingcar {

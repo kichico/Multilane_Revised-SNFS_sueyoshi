@@ -23,7 +23,7 @@ void Multilane_trafficflow_model::calculation(int lanelength, int NumberofCars, 
 	for (int i = 0; i < 300; i++) {
 		_dosimulation();
 		//std::cout << i << " th simulation" << std::endl;
-		if (constants.N == 180) for (int ID = 0; ID < constants.N; ID++) ofsPT << i << ","<< car.position.current[ID] << std::endl;
+		if (constants.N == 360) for (int ID = 0; ID < constants.N; ID++) if (car.lanenumber[ID] == 0) ofsPT << i << "," << car.position.current[ID] << std::endl;
 	}
 	ofsDF << constants.N << "," << flux << std::endl;
 	std::cout << flux << std::endl;
@@ -34,10 +34,10 @@ void Multilane_trafficflow_model::calculation(int lanelength, int NumberofCars, 
 
 void Multilane_trafficflow_model::_dosimulation() {
 	decide_velocity();
-	turnon_turn_signal();
+	//turnon_turn_signal();
 	update_position();
-	lane_change(car.canditate_velocity);
-	if (flg_lanechange) update_position();
+	//lane_change(car.canditate_velocity);
+	//if (flg_lanechange) update_position();
 }
 
 void Multilane_trafficflow_model::_defineconstants(int lanelength, int NumberofCars, double C, double D) {

@@ -67,15 +67,9 @@ void Lane_Change::lane_change(std::vector<int> canditate_velocity) {
 
 void Lane_Change::_pickup_Leadingcar() {
 	std::vector<int> listofLeadingcars(0);
-	for (int i = 0; i < constants.NumofLane; i++) {
-		listofLeadingcars.emplace_back(car.leadingcar[i].ID);
-		//std::cout << "LeadingcarID at" << i << "th lane =>" << listofLeadingcars[i] << std::endl;
-	}
-	//std::cout << listofLeadingcars.size() << std::endl;
+	for (int i = 0; i < constants.NumofLane; i++) listofLeadingcars.emplace_back(car.leadingcar[i].ID);
 	int NumofLeadingcar = listofLeadingcars.size();
 	int pickedupLeadingcar = random.random(NumofLeadingcar - 1);
-	//std::cout << listofLeadingcars[pickedupLeadingcar] << std::endl;
-	//std::cout << pickedupLeadingcar << std::endl;
 	leader = listofLeadingcars[pickedupLeadingcar];
 }
 
@@ -88,7 +82,6 @@ void Lane_Change::_pickup_whichcarwillmove() {
 		if (position < 0) position += constants.lanelength;
 		std::vector<Lane_Change::Lanechanger> Checksameposition_at_differentlane;
 		for (int lanenumber = 0; lanenumber < constants.NumofLane; lanenumber++) {
-			//std::cout << "lanenumber=>" << lanenumber << std::endl;
 			if (map.recorded.existence.current[lanenumber][position]) {
 				Lane_Change::Lanechanger candidate_lanechanger;
 				if (car.assigned_strategy[map.recorded.ID.current[lanenumber][position]] == car.strategy.D) {
@@ -98,8 +91,6 @@ void Lane_Change::_pickup_whichcarwillmove() {
 					Checksameposition_at_differentlane.emplace_back(candidate_lanechanger);
 				}
 				cnt_pickup++;
-				//std::cout << "cnt_pickup=>" << cnt_pickup << std::endl;
-				//std::cout << "howmancarswilllanechange=>" << Checksameposition_at_differentlane.size() << std::endl;
 			}
 		}
 		if (!Checksameposition_at_differentlane.empty()) {//decide the order of check insentive
@@ -107,7 +98,6 @@ void Lane_Change::_pickup_whichcarwillmove() {
 				while (Checksameposition_at_differentlane.size() > 0) {
 					int Numofcaratsameposition = Checksameposition_at_differentlane.size();
 					int randompickup = random.random(Numofcaratsameposition - 1);
-					//std::cout << "randompickup=>" << randompickup << std::endl;
 					Lane_Change::Lanechanger randomlanechanger = Checksameposition_at_differentlane[randompickup];
 					canditate_ListofLanechanger.emplace_back(randomlanechanger);
 					Checksameposition_at_differentlane.erase(Checksameposition_at_differentlane.begin() + randompickup);
@@ -148,7 +138,6 @@ void Lane_Change::_check_insentives(int lanechangerID, int signal) {
 				lanechange_availability = true;
 			}
 			else {
-				//std::cout << "To_left_LanechangerID=>" << lanechangerID << std::endl;
 				leftsidedistance = _get_aroundinformation(lanechangerID, signal);
 				if (leftsidedistance > car.velocity.current[ID] - car.velocity.current[canditate_ListofLanechanger[lanechangerID].around_information.preceeding.ID]) {
 					lanechange_availability = true;
@@ -163,7 +152,6 @@ void Lane_Change::_check_insentives(int lanechangerID, int signal) {
 				lanechange_availability = true;
 			}
 			else {
-				//std::cout << "To_right_LanechangerID=>" << lanechangerID << std::endl;
 				rightsidedistance = _get_aroundinformation(lanechangerID, signal);
 				if (rightsidedistance > car.velocity.current[ID] - car.velocity.current[canditate_ListofLanechanger[lanechangerID].around_information.preceeding.ID]) {
 					lanechange_availability = true;

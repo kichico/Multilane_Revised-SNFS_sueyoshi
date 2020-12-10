@@ -9,7 +9,10 @@ void Update_Position::update_position() {
 	map.lanevelocity = 0;
 	bool keepupdating = true;
 	int lanenumber = 0;
-	for (int i = 0; i < constants.NumofLane; i++) while (keepupdating) keepupdating = _update_fromLeadingcar(lanenumber, Measurewillbedone);
+	for (lanenumber = 0; lanenumber < constants.NumofLane; lanenumber++) {
+		while (keepupdating) keepupdating = _update_fromLeadingcar(lanenumber, Measurewillbedone);
+		keepupdating = true;
+	}
 	map.recorded.existence.current = map.updated.existence;
 	map.recorded.ID.current = map.updated.ID;
 	car.canditate_velocity = std::vector<int>(constants.N, 0);
@@ -58,13 +61,15 @@ bool Update_Position::_update_fromLeadingcar(int lanenumber, bool flg_measure) {
 			int followingcarID = car.around.following.current[ID];
 			int followingcarposition = car.position.current[followingcarID];
 			int distance = car.position.current[ID] - followingcarposition;
-			if (distance < 0) distance += constants.lanelength;
+			if (distance <= 0) distance += constants.lanelength;
 			if (distance > tempLeadingcar.distance) {
 				tempLeadingcar.ID = followingcarID;
 				tempLeadingcar.distance = distance;
 			}
-			//TODO modify when introducing multilane system
-			if (previouslanevelocity == map.lanevelocity) return false;
+			if (previouslanevelocity == map.lanevelocity) {
+				car.leadingcar[lanenumber] = tempLeadingcar;
+				return false;
+			}
 			else {
 				ID = car.leadingcar[lanenumber].ID;
 				previouslanevelocity = map.lanevelocity;
@@ -73,14 +78,13 @@ bool Update_Position::_update_fromLeadingcar(int lanenumber, bool flg_measure) {
 		}
 		else ID = car.around.following.current[ID];
 	}
-	car.leadingcar[lanenumber] = tempLeadingcar;
 }
 
 void Update_Position::_move_forward_car(int ID) {
 	int nextposition = car.position.current[ID];
 	int distanceavailable = car.canditate_velocity[ID];
 	int lanenumber = car.lanenumber[ID];
-	for (int i = 1; i <= distanceavailable; i++) {
+	for (int i = 1; i <= 5; i++) {
 		++nextposition;
 		if (nextposition >= constants.lanelength) nextposition -= constants.lanelength;
 		if (map.updated.existence[lanenumber][nextposition]) {
