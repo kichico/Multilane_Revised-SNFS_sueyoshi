@@ -7,6 +7,7 @@ private:
 	void _move_forward_car(int ID);
 	int cnt_update = 0;
 	bool flg_updated = false;
+	std::vector<bool> flg_crash;
 public:
 	bool Measurewillbedone;
 	void update_position();

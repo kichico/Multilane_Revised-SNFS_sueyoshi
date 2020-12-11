@@ -1,6 +1,7 @@
 #include "Decide_Velocity.h"
 
 void Decide_Velocity::decide_velocity() {
+	car.canditate_velocity = std::vector<int>(constants.N, 0);
 //#pragma omp parallel for num_threads(4)
 	for (int ID = 0; ID < constants.N; ID++) {
 		V = car.velocity.current[ID]; 

@@ -10,12 +10,10 @@ void Lane_Change::turnon_turn_signal() {
 	if (!canditate_ListofLanechanger.empty()) {
 		int NumberofLanechangers = canditate_ListofLanechanger.size();
 		for (int i = 0; i < NumberofLanechangers; i++) {
-			//std::cout << "i=>" << i << std::endl;
 			_check_insentives(i, car.signal_status.left);
 			_check_insentives(i, car.signal_status.right);
 			_choose_whichlanewillmove(i);
 		}
-		//std::cout << "debug lanechange finished check insentive" << std::endl;
 	}
 }
 
@@ -43,7 +41,7 @@ void Lane_Change::lane_change(std::vector<int> canditate_velocity) {
 					if (followingcar_existence_at_sidelane) {
 						int followerposition = position - j;
 						int followingcar_ID_at_sidelane = map.recorded.ID.current[next_lane][followerposition];
-						if (j >= canditate_velocity[followingcar_ID_at_sidelane] - canditate_velocity[ID]) lanechange_willbedone = true;
+						if (j >= car.velocity.current[followingcar_ID_at_sidelane] - car.velocity.current[ID]) lanechange_willbedone = true;
 						break;
 					}
 					else j++;
@@ -59,7 +57,6 @@ void Lane_Change::lane_change(std::vector<int> canditate_velocity) {
 				map.NumberofCars_at_thislane[car.lanenumber[ID]]++;
 				map.recorded.existence.current[car.lanenumber[ID]][position] = true;
 				_get_aroundinformation_afterlanechanging(car.lanenumber[ID], car.position.current[ID]);
-				flg_lanechange = true;
 			}
 		}
 	}
@@ -129,7 +126,9 @@ void Lane_Change::_check_insentives(int lanechangerID, int signal) {
 	if (insentivewillbemet) {
 		//Exception handling(ó·äOèàóù)
 		if (map.recorded.existence.current[side_lane][car.position.current[ID]]) return;
-		if (car.distance.current[ID] > car.velocity.current[ID] - car.velocity.current[car.around.preceeding.current[ID]]) return;
+		if (car.distance.current[ID] > car.velocity.current[ID] - car.velocity.current[car.around.preceeding.current[ID]]) {
+			return;
+		}
 		//
 		if (signal == car.signal_status.left) {
 			if (map.NumberofCars_at_thislane[side_lane] == 0) {
@@ -257,6 +256,7 @@ void Lane_Change::_get_aroundinformation_afterlanechanging(int lanenumber, int f
 		car.around.preceeding.current[followingcarID] = preceedingcarID;
 		car.distance.current[followingcarID] = headway;
 		car.around.following.current[preceedingcarID] = followingcarID;
+		//óvèCê≥
 		car.distance.current[preceedingcarID] = headway;
 		canditateLeadingcarID = followingcarID;
 	}

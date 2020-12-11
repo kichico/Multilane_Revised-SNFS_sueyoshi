@@ -7,6 +7,7 @@ void Update_Position::update_position() {
 	map.updated.existence = map.recorded.existence.current;
 	map.updated.ID = map.recorded.ID.current;
 	map.lanevelocity = 0;
+	flg_crash = std::vector<bool>(constants.N, false);
 	bool keepupdating = true;
 	int lanenumber = 0;
 	for (lanenumber = 0; lanenumber < constants.NumofLane; lanenumber++) {
@@ -15,18 +16,18 @@ void Update_Position::update_position() {
 	}
 	map.recorded.existence.current = map.updated.existence;
 	map.recorded.ID.current = map.updated.ID;
-	car.canditate_velocity = std::vector<int>(constants.N, 0);
+	//car.canditate_velocity = std::vector<int>(constants.N, 0);
 	//car.velocity.current = car.canditate_velocity;
 	if (Measurewillbedone) {
 		for (int lanenumber = 0; lanenumber < constants.NumofLane; lanenumber++) {
 			int i = 1;
 			while (true) {
+				if (i > 5) break;
 				if (map.recorded.existence.previous[lanenumber][100 - i]) {
-					int possiblypassedcarID = map.recorded.ID.current[lanenumber][100 - i];
-					if (car.position.current[possiblypassedcarID] >= 100) flux++; std::cout << flux << std::endl;
+					int possiblypassedcarID = map.recorded.ID.previous[lanenumber][100 - i];
+					if (car.position.current[possiblypassedcarID] >= 100) flux++;
 				}
 				i++;
-				if (i > 5) break;
 			}
 		}
 	}
@@ -40,6 +41,7 @@ bool Update_Position::_update_fromLeadingcar(int lanenumber, bool flg_measure) {
 	tempLeadingcar.existence = false;
 	//map.updated.existence[car.position.current[ID]] = true;
 	int previouslanevelocity = map.lanevelocity;
+	
 	while (true) {
 		if (Update_again[ID]) _move_forward_car(ID);
 		else nextposition = car.position.current[ID];
@@ -82,16 +84,17 @@ bool Update_Position::_update_fromLeadingcar(int lanenumber, bool flg_measure) {
 
 void Update_Position::_move_forward_car(int ID) {
 	int nextposition = car.position.current[ID];
-	int distanceavailable = car.canditate_velocity[ID];
+	int distanceavailable = car.canditate_velocity[ID]; //How many cells I cam move in this time step
+	if (flg_crash[ID]) distanceavailable = car.canditate_velocity[ID] - car.velocity.current[ID];
 	int lanenumber = car.lanenumber[ID];
-	for (int i = 1; i <= 5; i++) {
+	for (int i = 1; i <= distanceavailable; i++) {
 		++nextposition;
 		if (nextposition >= constants.lanelength) nextposition -= constants.lanelength;
-		if (map.updated.existence[lanenumber][nextposition]) {
+		if (map.updated.existence[lanenumber][nextposition]) { //If there is another car in the way
 			Update_again[ID] = true;
 			--nextposition;
 			if (nextposition < 0) nextposition += constants.lanelength;
-			car.canditate_velocity[ID] = i - 1;
+			flg_crash[ID] = true;
 			break;
 		}
 	}
