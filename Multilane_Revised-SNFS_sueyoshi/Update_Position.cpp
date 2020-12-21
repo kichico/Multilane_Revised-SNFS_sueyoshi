@@ -1,5 +1,9 @@
 #include "Update_Position.h"
 
+//This function is calling _update_fromLeaidngcar by lane.
+//If you increased the number of lanes, that function will be more and more called by this function.
+//Also this function should be rewritten when introducing multilane system, let's consider what the matter.
+
 void Update_Position::update_position() {
 	Update_again = std::vector<bool>(constants.N, true);
 	car.Fromcurrent_toprevious();
@@ -13,22 +17,21 @@ void Update_Position::update_position() {
 	map.recorded.existence.current = map.updated.existence;
 	map.recorded.ID.current = map.updated.ID;
 	car.canditate_velocity = std::vector<int>(constants.N, 0);
-	//car.velocity.current = car.canditate_velocity;
 	if (Measurewillbedone) {
 		for (int i = 0; i < constants.N; i++) if (car.position.previous[i] < 100 && car.position.current[i] >= 100) {
 			flux++;
-			//std::cout << i << "th car.position.current=>" << car.position.current[i] << ", car.position.previous=>" << car.position.previous[i] << std::endl;
 		}
 	}
 }
 
+//This function decide every car is updated own position until they want or not.
+//This function is called once or twice at one lane.
 bool Update_Position::_update_fromLeadingcar(int lanenumber, bool flg_measure) {
 	int ID = car.leadingcar.ID;
 	int nextposition = 0;
 	map.lanevelocity = 0;
 	Car_information::Leadingcar tempLeadingcar;
 	tempLeadingcar.existence = false;
-	//map.updated.existence[car.position.current[ID]] = true;
 	int previouslanevelocity = map.lanevelocity;
 	while (true) {
 		if (Update_again[ID]) _move_forward_car(ID);
@@ -56,7 +59,7 @@ bool Update_Position::_update_fromLeadingcar(int lanenumber, bool flg_measure) {
 				tempLeadingcar.ID = followingcarID;
 				tempLeadingcar.distance = distance;
 			}
-			//TODO modify when introducing multilane sysy\tem
+			//TODO modify when introducing multilane sysytem
 			if (previouslanevelocity == map.lanevelocity) return false;
 			else {
 				ID = car.leadingcar.ID;

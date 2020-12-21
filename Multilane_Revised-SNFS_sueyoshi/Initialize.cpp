@@ -9,6 +9,8 @@ void Initialize::initialize(int lanelength, int NumberofCars) {
 	map.Fromcurrent_toprevious();
 }
 
+//In this function, cell is assigned for each vehicle randomly.
+//and record the position and ID relationships in "map" class
 void Initialize::_initialplacement(int lanelength,int NumberofCars) {
 	std::vector<int> List_notplacedcell(lanelength);
 	for (int i = 0; i < lanelength; i++) List_notplacedcell[i] = i;
@@ -18,6 +20,7 @@ void Initialize::_initialplacement(int lanelength,int NumberofCars) {
 		int pikedupcell = List_notplacedcell[picker];
 		std::iter_swap(List_notplacedcell.begin() + picker, List_notplacedcell.end() - 1);
 		List_notplacedcell.pop_back();
+		//the calculation speed of "iter_swap + pop_back" method is faster than "erase" method
 		car.position.current[ID] = car.position.previous[ID] = pikedupcell;
 		map.recorded.existence.current[pikedupcell] = map.recorded.existence.previous[pikedupcell] = true;
 		map.recorded.ID.current[pikedupcell] = map.recorded.ID.previous[pikedupcell] = ID;
@@ -28,21 +31,21 @@ void Initialize::_initialplacement(int lanelength,int NumberofCars) {
 	int focalcarID = 0;
 	int maximumdistance = 0;
 	int firstidentifiedcarID = 0;
-	//TODO When it is introduced Multilane system, these conditions shoud be modified.
-	
+	//In honestly say, this section should be rewritten because of some reasons.
 	for (int i = 0; i < lanelength; i++) {
 		if (map.recorded.existence.current[i]) {
 			if (cnt_identified == 1) {
 				followingcarID = map.recorded.ID.current[i];
 				firstidentifiedcarID = followingcarID;
 				followingcarposition = car.position.current[followingcarID];
+				if (NumberofCars == 1) break;
 				++cnt_identified;
 			}
 			else if (cnt_identified != NumberofCars) {
 				focalcarID = map.recorded.ID.current[i];
 				car.around.preceeding.current[followingcarID] = focalcarID;
 				car.around.following.current[focalcarID] = followingcarID;
-				car.distance.current[followingcarID] = car.position.current[focalcarID] - followingcarposition;
+				car.distance.current[followingcarID] = car.position.current[focalcarID] - followingcarposition -1;
 				if (car.distance.current[followingcarID] < 0) car.distance.current[followingcarID] += lanelength;
 				if (car.distance.current[followingcarID] >= maximumdistance) {
 					maximumdistance = car.distance.current[followingcarID];
@@ -56,15 +59,14 @@ void Initialize::_initialplacement(int lanelength,int NumberofCars) {
 			}
 			else if (cnt_identified == NumberofCars) {
 				focalcarID = map.recorded.ID.current[i];
-				//followingcarID = car.around.following.current[focalcarID];
 				car.around.following.current[focalcarID] = followingcarID;
 				car.around.preceeding.current[followingcarID] = car.around.following.current[firstidentifiedcarID] = focalcarID;
 				car.around.preceeding.current[focalcarID] = firstidentifiedcarID;
-				car.distance.current[followingcarID] = car.position.current[focalcarID] - followingcarposition;
+				car.distance.current[followingcarID] = car.position.current[focalcarID] - followingcarposition - 1;
 				if (car.distance.current[followingcarID] < 0) car.distance.current[followingcarID] += lanelength;
-				car.distance.current[focalcarID] = car.position.current[firstidentifiedcarID] - car.position.current[focalcarID];
+				car.distance.current[focalcarID] = car.position.current[firstidentifiedcarID] - car.position.current[focalcarID] - 1;
 				if (car.distance.current[focalcarID] < 0) car.distance.current[focalcarID] += lanelength;
-				car.distance.current[firstidentifiedcarID] = car.position.current[firstidentifiedcarID] - car.position.current[focalcarID];
+				car.distance.current[firstidentifiedcarID] = car.position.current[firstidentifiedcarID] - car.position.current[focalcarID] - 1;
 				if (car.distance.current[firstidentifiedcarID] < 0) car.distance.current[firstidentifiedcarID] += lanelength;
 				if (car.distance.current[followingcarID] >= maximumdistance) {
 					maximumdistance = car.distance.current[followingcarID];

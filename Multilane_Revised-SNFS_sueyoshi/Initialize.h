@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 
+//This class is superviser of some classes, "Car_information" , "Map_information" and more.
 class Initialize {
 private:
 	void _initialplacement(int lanelength, int NumberofCars);

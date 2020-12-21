@@ -2,6 +2,8 @@
 #define CARINFORMATION_H
 
 #include <vector>
+
+//This class store the information of vechiles based on ID
 class Car_information {
 private:
 	struct CurrentandPreviousvector {
@@ -23,7 +25,6 @@ public:
 		double elapsed;
 	};
 	std::vector<int> canditate_velocity;
-	//std::vector<int> lanenumber;
 	std::vector<int> S;
 	void initialize(int NumberofCars);
 	void Fromcurrent_toprevious();

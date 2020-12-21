@@ -1,6 +1,8 @@
 #ifndef MAPINFORMATION_H
 #define MAPINFORMATION_H
 #include <vector>
+
+//This class store the information shows what car is and existence in the specific cell.
 class Map_information {
 private:
 	struct CurrentandPreviousbool {

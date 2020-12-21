@@ -1,5 +1,6 @@
 #include "Decide_Velocity.h"
 
+//This section calculate next maximum velocity(some vehicle cannnot run as this velocity)
 void Decide_Velocity::decide_velocity() {
 //#pragma omp parallel for num_threads(4)
 	for (int ID = 0; ID < constants.N; ID++) {
@@ -26,11 +27,9 @@ void Decide_Velocity::_make_V1(int V, int ID) { //acceleration
 		std::cout << rule.V1 << std::endl;
 		std::getchar();
 	}
-	//std::cout << "debuging V1 end" << std::endl;
 }
 
 void Decide_Velocity::_make_V2(int ID) {
-	//std::cout << "debuging V2 start" << std::endl;
 	rule.V2 = rule.V1;
 	if (random.random(1.0) <= constants.q) {
 		car.S[ID] = 1;
@@ -43,36 +42,34 @@ void Decide_Velocity::_make_V2(int ID) {
 		if (distance_previous < 0) distance_previous += constants.lanelength;
 		if (rule.V1 > distance_previous) rule.V2 = distance_previous;
 	}
-
 	if (rule.V2 < 0) {
 		std::cout << "error V2 " << ID << std::endl;
 		std::cout << rule.V2 << std::endl;
 		std::getchar();
 	}
-	//std::cout << "debuging V2 end" << std::endl;
 }
 
 void Decide_Velocity::_make_V3(int ID) {
-	//std::cout << "debuging V3 start" << std::endl;
 	rule.V3 = rule.V2;
-	car.S[ID] = constants.S;
-	int preceedingcarID = car.around.preceeding.current[ID];
-	int s = 1;
-	for (s; s < car.S[ID]; s++) preceedingcarID = car.around.preceeding.current[preceedingcarID];
-	int distance_current = car.position.current[preceedingcarID] - car.position.current[ID];
-	distance_current -= car.S[ID];
-	if (distance_current < 0) distance_current += constants.lanelength;
-	if (rule.V2 > distance_current) rule.V3 = distance_current;
+	if (random.random(1.0) <= constants.q) {
+		car.S[ID] = 1;
+		if (random.random(1.0) <= constants.r) car.S[ID] = constants.S;
+		int preceedingcarID = car.around.preceeding.current[ID];
+		int s = 1;
+		for (s; s < car.S[ID]; s++) preceedingcarID = car.around.preceeding.current[preceedingcarID];
+		int distance_current = car.position.current[preceedingcarID] - car.position.current[ID];
+		distance_current -= car.S[ID];
+		if (distance_current < 0) distance_current += constants.lanelength;
+		if (rule.V2 > distance_current) rule.V3 = distance_current;
+	}
 	if (rule.V3 < 0) {
 		std::cout << "error V3 " << ID << std::endl;
 		std::cout << rule.V3 << std::endl;
 		std::getchar();
 	}
-	//std::cout << "debuging V3 end" << std::endl;
 }
 
 void Decide_Velocity::_make_V4(int ID) {
-	//std::cout << "debuging V4 start" << std::endl;
 	double p_i = constants.p1;
 	rule.V4 = rule.V3;
 	int preceedingcarID = car.around.preceeding.current[ID];
@@ -93,5 +90,4 @@ void Decide_Velocity::_make_V4(int ID) {
 		std::cout << rule.V4 << std::endl;
 		std::getchar();
 	}
-	//std::cout << "debuging V4 end" << std::endl;
 }
