@@ -9,7 +9,7 @@ void Update_Position::update_position() {
 	map.lanevelocity = 0;
 	bool keepupdating = true;
 	int lanenumber = 0;
-	while (keepupdating) keepupdating = _update_fromLeadingcar(lanenumber,Measurewillbedone);
+	while (keepupdating) keepupdating = _update_fromLeadingcar(lanenumber, Measurewillbedone);
 	map.recorded.existence.current = map.updated.existence;
 	map.recorded.ID.current = map.updated.ID;
 	car.canditate_velocity = std::vector<int>(constants.N, 0);

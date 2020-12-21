@@ -10,7 +10,7 @@
 
 class Initialize {
 private:
-	void _initialplacement(int lanelength,int NumberofCars);
+	void _initialplacement(int lanelength, int NumberofCars);
 	void _defineVmax(bool flg_ditributedVmax, int NumberofCars);
 public:
 	bool flg_distributedVmax = false;
