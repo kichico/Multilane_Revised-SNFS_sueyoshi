@@ -9,10 +9,9 @@ public:
 	double p4;
 	double q;
 	double r;
-	std::vector<int> Vmax;
 	int G;
 	int S;
 	int N;
-	int lanelength;
+	double lanelength;
 };
 #endif // !CONSTANTS_H

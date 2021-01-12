@@ -9,12 +9,11 @@ void Car_information::Fromcurrent_toprevious() {
 }
 
 void Car_information::initialize(int NumberofCars) {
-	position.current = position.previous = std::vector<int>(NumberofCars, 0);
-	velocity.current = velocity.previous = std::vector<int>(NumberofCars, 0);
-	distance.current = distance.previous = std::vector<int>(NumberofCars, 0);
-	around.following.current = around.following.previous = around.preceeding.current = around.preceeding.previous = std::vector<int>(NumberofCars, 0);
+	position.current = position.previous = std::vector<double>(NumberofCars, 0);
+	velocity.current = velocity.previous = std::vector<double>(NumberofCars, 0);
+	distance.current = distance.previous = std::vector<double>(NumberofCars, 0);
+	around.following.current = around.following.previous = around.preceeding.current = around.preceeding.previous = std::vector<double>(NumberofCars, 0);
 	measure = std::vector<Measure>(NumberofCars);
-	canditate_velocity = std::vector<int>(NumberofCars, 0);
-	S = std::vector<int>(NumberofCars, 0);
+	canditate_velocity = std::vector<double>(NumberofCars, 0);
 }
 

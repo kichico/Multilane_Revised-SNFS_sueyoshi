@@ -1,6 +1,6 @@
 #include "Map_information.h"
 
-void Map_information::initialize(int lanelength) {
+void Map_information::initialize(double lanelength) {
 	recorded.existence.current = recorded.existence.previous = updated.existence = std::vector<bool>(lanelength, false);
 	recorded.ID.current = recorded.ID.previous = updated.ID = std::vector<int>(lanelength, 0);
 }

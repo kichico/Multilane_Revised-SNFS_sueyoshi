@@ -11,15 +11,15 @@
 //This class is superviser of some classes, "Car_information" , "Map_information" and more.
 class Initialize {
 private:
-	void _initialplacement(int lanelength, int NumberofCars);
-	void _defineVmax(bool flg_ditributedVmax, int NumberofCars);
+	void _initialplacement(double lanelength, int NumberofCars);
+	//void _defineVmax(bool flg_ditributedVmax, int NumberofCars);
 public:
 	bool flg_distributedVmax = false;
 	Car_information car;
 	Map_information map;
 	Random random;
 	Constants constants;
-	void initialize(int lanelength, int NumberofCars);
+	void initialize(double lanelength, int NumberofCars);
 };
 
 #endif // !INITIALIZE_H

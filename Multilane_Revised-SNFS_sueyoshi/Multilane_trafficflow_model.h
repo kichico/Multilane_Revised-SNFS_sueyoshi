@@ -5,9 +5,9 @@
 class Multilane_trafficflow_model : public Update_Position {
 private:
 	void _dosimulation();
-	void _defineconstants(int lanelength, int NumberofCars, double C, double D);
+	void _defineconstants(double lanelength, int NumberofCars, double C, double D);
 public:
-	void calculation(int lanelength, int NumberofCars, double C, double D);
+	void calculation(double lanelength, int NumberofCars, double C, double D);
 };
 
 

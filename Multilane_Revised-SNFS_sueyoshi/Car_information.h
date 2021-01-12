@@ -7,8 +7,8 @@
 class Car_information {
 private:
 	struct CurrentandPreviousvector {
-		std::vector<int> current;
-		std::vector<int> previous;
+		std::vector<double> current;
+		std::vector<double> previous;
 	};
 	struct PreceedingandFollowingcarID {
 		CurrentandPreviousvector preceeding;
@@ -17,17 +17,18 @@ private:
 public:
 	struct Leadingcar {
 		int ID;
-		int distance;
+		double distance;
 		bool existence;
 	};
 	struct Measure {
 		bool measured;
 		double elapsed;
 	};
-	std::vector<int> canditate_velocity;
-	std::vector<int> S;
+	std::vector<double> canditate_velocity;
+	//std::vector<int> S;
 	void initialize(int NumberofCars);
 	void Fromcurrent_toprevious();
+	double Vmax = 27;
 	CurrentandPreviousvector position, velocity, distance;
 	Leadingcar leadingcar;
 	PreceedingandFollowingcarID around;

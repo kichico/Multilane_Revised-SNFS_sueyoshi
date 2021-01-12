@@ -145,20 +145,20 @@
   <ItemGroup>
     <ClInclude Include="Car_information.h" />
     <ClInclude Include="Constants.h" />
-    <ClInclude Include="Decide_Velocity.h" />
     <ClInclude Include="Initialize.h" />
     <ClInclude Include="Map_information.h" />
     <ClInclude Include="Multilane_trafficflow_model.h" />
+    <ClInclude Include="OVfunction.h" />
     <ClInclude Include="random.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="Update_Position.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Car_information.cpp" />
-    <ClCompile Include="Decide_Velocity.cpp" />
     <ClCompile Include="Initialize.cpp" />
     <ClCompile Include="Map_information.cpp" />
     <ClCompile Include="Multilane_trafficflow_model.cpp" />
+    <ClCompile Include="OVfunction.cpp" />
     <ClCompile Include="random.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="String.cpp" />

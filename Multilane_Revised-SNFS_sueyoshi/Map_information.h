@@ -22,10 +22,10 @@ private:
 		std::vector<int> ID;
 	};
 public:
-	int lanevelocity;
+	double lanevelocity;
 	map_information recorded;
 	update_information updated;
-	void initialize(int lanelength);
+	void initialize(double lanelength);
 	void Fromcurrent_toprevious();
 };
 
