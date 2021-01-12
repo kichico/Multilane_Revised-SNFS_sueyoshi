@@ -94,20 +94,20 @@ void Initialize::_defineVmax(bool flg_distributedVmax, int NumberofCars) {
 	constants.Vmax = std::vector<int>(NumberofCars, 0);
 	if (flg_distributedVmax == false) for (int i = 0; i < NumberofCars;i++) constants.Vmax[i] = 5;
 	else {
+		std::vector<int> List_notassignedVmax(NumberofCars);
 		//TODO When it is introduced variable distributed Vmax, this section should be change.
 		for (int i = 0; i < NumberofCars;i++) {
-			if (i % 3 == 0) constants.Vmax[i] = 4;
-			if (i % 3 == 1) constants.Vmax[i] = 5;
-			if (i % 3 == 2) constants.Vmax[i] = 6;
+			if (i % 3 == 0) List_notassignedVmax[i] = 4;
+			if (i % 3 == 1) List_notassignedVmax[i] = 5;
+			if (i % 3 == 2) List_notassignedVmax[i] = 6;
 		}
-		std::vector<int> List_notassignedVmax(NumberofCars);
 		for (int ID = 0; ID < NumberofCars; ID++) {
 			int remainListsize = List_notassignedVmax.size();
 			int picker = random.random(remainListsize - 1);
 			int pikedupVmax =List_notassignedVmax[picker];
 			std::iter_swap(List_notassignedVmax.begin() + picker,List_notassignedVmax.end() - 1);
 			List_notassignedVmax.pop_back();
-			car.velocity.current[ID] = pikedupVmax;
+			constants.Vmax[ID] = pikedupVmax;
 		}
 	}
 }
