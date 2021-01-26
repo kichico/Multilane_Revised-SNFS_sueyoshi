@@ -27,10 +27,6 @@ void Multilane_trafficflow_model::calculation(int lanelength, int NumberofCars, 
 	Measurewillbedone = true;
 	for (int i = 0; i < 300; i++) {
 		_dosimulation();
-		if (constants.N == 180) {
-			for (int ID = 0; ID < constants.N; ID++) ofsPT << i << ","<< car.position.current[ID] << std::endl;
-			std::cout << "debug..." << std::endl;
-		}
 	}
 	ofsDF << constants.N << "," << flux << std::endl;
 	std::cout << flux << std::endl;
