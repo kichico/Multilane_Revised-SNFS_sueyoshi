@@ -26,7 +26,7 @@ void Multilane_trafficflow_model::calculation(double lanelength, int NumberofCar
 	double global_density = constants.N / constants.lanelength;
 	for (int i = 0; i < 500; i++) {
 		_dosimulation();
-		ofsGF << i * 0.1 << "," << car.velocity.current[10] << "," << car.position.current[10] << std::endl;
+		for (int ID = 0; ID < constants.N; ++ID) ofsGF << ID << "," << i * 0.1 << "," << car.velocity.current[ID] << "," << car.position.current[ID] << std::endl;
 		for (auto position : car.position.current) ofsPT << (double)i * dt << "," << position << std::endl;
 	}
 	Measurewillbedone = true;

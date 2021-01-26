@@ -18,5 +18,6 @@ void Initialize::_initialplacement(double lanelength,int NumberofCars) {
 		if (car.position.current[i] >= constants.lanelength) car.position.current[i] -= constants.lanelength;
 		iter++;
 	}
+	for (int i = 0; i < constants.N; ++i) car.velocity.current[i] = random.random(1.0, 3.0);
 }
 

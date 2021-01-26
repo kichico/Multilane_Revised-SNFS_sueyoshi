@@ -10,8 +10,8 @@ public:
 	double dt = 0.1;
 	std::vector<double> dv;
 private:
-	double alpha = 0.4;
-	double hc = 2.21;
+	double alpha = 0.9;
+	double hc = 21.1;
 	double OVterm;
 	double V;
 	double headway;

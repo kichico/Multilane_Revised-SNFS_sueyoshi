@@ -25,7 +25,7 @@ public:
 		double elapsed;
 	};
 	std::vector<double> canditate_velocity;
-	//std::vector<int> S;
+	std::vector<int> S;
 	void initialize(int NumberofCars);
 	void Fromcurrent_toprevious();
 	double Vmax = 27;

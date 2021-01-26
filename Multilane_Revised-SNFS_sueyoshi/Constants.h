@@ -13,5 +13,6 @@ public:
 	int S;
 	int N;
 	double lanelength;
+
 };
 #endif // !CONSTANTS_H

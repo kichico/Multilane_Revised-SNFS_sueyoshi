@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -146,6 +146,7 @@
     <ClInclude Include="Car_information.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Initialize.h" />
+    <ClInclude Include="Lane_Change.h" />
     <ClInclude Include="Map_information.h" />
     <ClInclude Include="Multilane_trafficflow_model.h" />
     <ClInclude Include="OVfunction.h" />
@@ -156,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="Car_information.cpp" />
     <ClCompile Include="Initialize.cpp" />
+    <ClCompile Include="Lane_Change.cpp" />
     <ClCompile Include="Map_information.cpp" />
     <ClCompile Include="Multilane_trafficflow_model.cpp" />
     <ClCompile Include="OVfunction.cpp" />
