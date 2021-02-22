@@ -79,6 +79,8 @@ void Decide_Velocity::_make_V4(int ID) {
 	int preceedingcarID = car.around.preceeding.current[ID];
 	int Difference_of_Velocity = car.velocity.current[preceedingcarID] - car.velocity.current[ID];
 	if (Difference_of_Velocity < 0) car.distance.current[ID] += constants.lanelength;
+	int headway = car.position.current[preceedingcarID] - car.position.current[ID];
+	if(headway>=300) std::cout << ID << "th headway=>" << car.position.current[preceedingcarID] - car.position.current[ID] << std::endl;
 	if (car.distance.current[ID] < constants.G) {
 		if (Difference_of_Velocity > 0) p_i = constants.p2;
 		if (Difference_of_Velocity == 0) p_i = constants.p3;
