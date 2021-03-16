@@ -60,7 +60,7 @@ bool Update_Position::_update_fromLeadingcar(int lanenumber, bool flg_measure) {
 				tempLeadingcar.distance = distance;
 			}
 			//TODO modify when introducing multilane sysytem
-			if (previouslanevelocity == map.lanevelocity) return false;
+			if (previouslanevelocity == map.lanevelocity) break;
 			else {
 				ID = car.leadingcar.ID;
 				previouslanevelocity = map.lanevelocity;
@@ -70,6 +70,7 @@ bool Update_Position::_update_fromLeadingcar(int lanenumber, bool flg_measure) {
 		else ID = car.around.following.current[ID];
 	}
 	car.leadingcar = tempLeadingcar;
+	return false;
 }
 
 void Update_Position::_move_forward_car(int ID) {
@@ -82,7 +83,7 @@ void Update_Position::_move_forward_car(int ID) {
 			Update_again[ID] = true;
 			--nextposition;
 			if (nextposition < 0) nextposition += constants.lanelength;
-			car.canditate_velocity[ID] = i - 1;
+			car.canditate_velocity[ID] -= i - 1;
 			break;
 		}
 	}
@@ -94,7 +95,7 @@ void Update_Position::_move_forward_car(int ID) {
 	car.position.current[ID] = nextposition;
 	car.velocity.current[ID] = nextposition - car.position.previous[ID];
 	if (car.velocity.current[ID] < 0) car.velocity.current[ID] += constants.lanelength;
-	int preceedingcarID = car.around.preceeding.current[ID];
+	int preceedingcarID = car.around.preceding.current[ID];
 	car.distance.current[ID] = car.position.current[preceedingcarID] - car.position.current[ID];
 	if (car.distance.current[ID] < 0) car.distance.current[ID] += constants.lanelength;
 }

@@ -11,7 +11,7 @@ private:
 		std::vector<int> previous;
 	};
 	struct PreceedingandFollowingcarID {
-		CurrentandPreviousvector preceeding;
+		CurrentandPreviousvector preceding;
 		CurrentandPreviousvector following;
 	};
 public:

@@ -15,7 +15,7 @@ void Decide_Velocity::decide_velocity() {
 
 void Decide_Velocity::_make_V1(int V, int ID) { //acceleration
 	//std::cout << "debuging V1 start" << std::endl;
-	int preceedingcarID = car.around.preceeding.current[ID];
+	int preceedingcarID = car.around.preceding.current[ID];
 	int Difference_of_Velocity = car.velocity.current[preceedingcarID] - car.velocity.current[ID];
 	if (car.distance.current[ID] >= constants.G || Difference_of_Velocity >= 0) {
 		if (V + 1 > constants.Vmax[ID]) rule.V1 = constants.Vmax[ID];
@@ -34,9 +34,9 @@ void Decide_Velocity::_make_V2(int ID) {
 	if (random.random(1.0) <= constants.q) {
 		car.S[ID] = 1;
 		if (random.random(1.0) <= constants.r) car.S[ID] = constants.S;
-		int previous_preceedingcarID = car.around.preceeding.previous[ID];
+		int previous_preceedingcarID = car.around.preceding.previous[ID];
 		int s = 1;
-		for (s; s < car.S[ID]; s++) previous_preceedingcarID = car.around.preceeding.previous[previous_preceedingcarID];
+		for (s; s < car.S[ID]; s++) previous_preceedingcarID = car.around.preceding.previous[previous_preceedingcarID];
 		int distance_previous = car.position.previous[previous_preceedingcarID] - car.position.previous[ID];
 		distance_previous -= car.S[ID];
 		if (distance_previous < 0) distance_previous += constants.lanelength;
@@ -54,9 +54,9 @@ void Decide_Velocity::_make_V3(int ID) {
 	if (random.random(1.0) <= constants.q) {
 		car.S[ID] = 1;
 		if (random.random(1.0) <= constants.r) car.S[ID] = constants.S;
-		int preceedingcarID = car.around.preceeding.current[ID];
+		int preceedingcarID = car.around.preceding.current[ID];
 		int s = 1;
-		for (s; s < car.S[ID]; s++) preceedingcarID = car.around.preceeding.current[preceedingcarID];
+		for (s; s < car.S[ID]; s++) preceedingcarID = car.around.preceding.current[preceedingcarID];
 		int distance_current = car.position.current[preceedingcarID] - car.position.current[ID];
 		distance_current -= car.S[ID];
 		if (distance_current < 0) distance_current += constants.lanelength;
@@ -72,9 +72,8 @@ void Decide_Velocity::_make_V3(int ID) {
 void Decide_Velocity::_make_V4(int ID) {
 	double p_i = constants.p1;
 	rule.V4 = rule.V3;
-	int preceedingcarID = car.around.preceeding.current[ID];
+	int preceedingcarID = car.around.preceding.current[ID];
 	int Difference_of_Velocity = car.velocity.current[preceedingcarID] - car.velocity.current[ID];
-	if (Difference_of_Velocity < 0) car.distance.current[ID] += constants.lanelength;
 	if (car.distance.current[ID] < constants.G) {
 		if (Difference_of_Velocity > 0) p_i = constants.p2;
 		if (Difference_of_Velocity == 0) p_i = constants.p3;

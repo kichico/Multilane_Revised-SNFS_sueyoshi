@@ -43,7 +43,7 @@ void Initialize::_initialplacement(int lanelength,int NumberofCars) {
 			}
 			else if (cnt_identified != NumberofCars) {
 				focalcarID = map.recorded.ID.current[i];
-				car.around.preceeding.current[followingcarID] = focalcarID;
+				car.around.preceding.current[followingcarID] = focalcarID;
 				car.around.following.current[focalcarID] = followingcarID;
 				car.distance.current[followingcarID] = car.position.current[focalcarID] - followingcarposition -1;
 				if (car.distance.current[followingcarID] < 0) car.distance.current[followingcarID] += lanelength;
@@ -60,8 +60,8 @@ void Initialize::_initialplacement(int lanelength,int NumberofCars) {
 			else if (cnt_identified == NumberofCars) {
 				focalcarID = map.recorded.ID.current[i];
 				car.around.following.current[focalcarID] = followingcarID;
-				car.around.preceeding.current[followingcarID] = car.around.following.current[firstidentifiedcarID] = focalcarID;
-				car.around.preceeding.current[focalcarID] = firstidentifiedcarID;
+				car.around.preceding.current[followingcarID] = car.around.following.current[firstidentifiedcarID] = focalcarID;
+				car.around.preceding.current[focalcarID] = firstidentifiedcarID;
 				car.distance.current[followingcarID] = car.position.current[focalcarID] - followingcarposition - 1;
 				if (car.distance.current[followingcarID] < 0) car.distance.current[followingcarID] += lanelength;
 				car.distance.current[focalcarID] = car.position.current[firstidentifiedcarID] - car.position.current[focalcarID] - 1;
