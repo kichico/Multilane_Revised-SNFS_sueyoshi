@@ -17,9 +17,10 @@ void Update_Position::update_position() {
 	map.recorded.existence.current = map.updated.existence;
 	map.recorded.ID.current = map.updated.ID;
 	car.canditate_velocity = std::vector<int>(constants.N, 0);
+	int measuringpoint = 100;
 	if (Measurewillbedone) {
-		for (int i = 0; i < constants.N; i++) if (car.position.previous[i] < 100 && car.position.current[i] >= 100) {
-			flux++;
+		for (int i = 0; i < 5; ++i) if (map.recorded.existence.current[measuringpoint + i]) {
+			if (car.position.previous[map.recorded.ID.current[] < 100 && car.position.current[i] >= 100) flux++;
 		}
 	}
 }

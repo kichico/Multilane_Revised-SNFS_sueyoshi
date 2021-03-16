@@ -23,7 +23,7 @@ void Decide_Velocity::_make_V1(int V, int ID) { //acceleration
 	}
 	else rule.V1 = V;
 	if (rule.V1 < 0) {
-		std::cout << "error V1 " << ID << std::endl;
+		std::cout << "error V1 " << ID << std::endl; 
 		std::cout << rule.V1 << std::endl;
 		std::getchar();
 	}
